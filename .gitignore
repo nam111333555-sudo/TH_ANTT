@@ -4,3 +4,7 @@ __pycache__/
 venv/
 *.egg-info/
 gitsecure.log
+secure.log
+secure.log.*
+flask_run.log
+*.log.gz
