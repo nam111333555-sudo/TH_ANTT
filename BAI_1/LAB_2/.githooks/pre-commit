@@ -1,0 +1,121 @@
+#!/usr/bin/env python
+import os, re, subprocess, sys, stat, platform
+from datetime import datetime
+
+LOG_FILE = "gitsecure.log"
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+except AttributeError:
+    pass
+
+SENSITIVE_PATTERNS = [
+    r"(apikey|api_key)\s*[:=]\s*['\"][A-Za-z0-9_\-]{16,}['\"]",
+    r"(secret|secret_key)\s*[:=]\s*['\"][A-Za-z0-9_\-]{8,}['\"]",
+    r"(password|passwd)\s*[:=]\s*['\"][^'\"]{4,}['\"]",
+    r"(token)\s*[:=]\s*['\"][A-Za-z0-9_\-]{16,}['\"]",
+    r"(AKIA|ASIA)[A-Z0-9]{16}",
+]
+
+# Cho phép chạy bandit từ venv của LAB_2 (Windows không có sẵn 'bandit' trong PATH toàn cục)
+LAB2_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+VENV_BANDIT_CANDIDATES = [
+    os.path.join(LAB2_DIR, ".venv", "bin", "bandit.exe"),
+    os.path.join(LAB2_DIR, ".venv", "bin", "bandit"),
+    os.path.join(LAB2_DIR, ".venv", "Scripts", "bandit.exe"),
+]
+
+
+def log(msg):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        f.write(f"[{timestamp}] {msg}\n")
+
+
+def get_staged_files():
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"],
+        capture_output=True, text=True
+    )
+    files = [f for f in result.stdout.splitlines() if f.strip()]
+    return [f for f in files if os.path.isfile(f)]
+
+
+def scan_sensitive(file_path):
+    findings = []
+    try:
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            for lineno, line in enumerate(f, start=1):
+                for pattern in SENSITIVE_PATTERNS:
+                    if re.search(pattern, line, re.IGNORECASE):
+                        findings.append(
+                            f"[SECRET] {file_path}:{lineno}: có khả năng chứa thông tin nhạy cảm -> {line.strip()}"
+                        )
+    except Exception as e:
+        findings.append(f"[ERROR] Không thể đọc {file_path}: {e}")
+    return findings
+
+
+def check_permissions(file_path):
+    if platform.system() == "Windows":
+        return None
+    try:
+        mode = os.stat(file_path).st_mode
+        if mode & stat.S_IWOTH:
+            return f"[PERMISSION] {file_path}: tệp đang ở chế độ world-writable (nguy hiểm)"
+    except Exception as e:
+        return f"[ERROR] Không thể kiểm tra quyền {file_path}: {e}"
+    return None
+
+
+def find_bandit_cmd():
+    for candidate in VENV_BANDIT_CANDIDATES:
+        if os.path.isfile(candidate):
+            return candidate
+    return "bandit"
+
+
+def run_bandit():
+    findings = []
+    bandit_cmd = find_bandit_cmd()
+    try:
+        result = subprocess.run(
+            [bandit_cmd, "-r", ".", "-f", "txt"],
+            capture_output=True, text=True
+        )
+        output = result.stdout + result.stderr
+        if "Severity: High" in output:
+            findings.append("[BANDIT] Phát hiện lỗ hổng mức nghiêm trọng CAO (Severity: High):")
+            findings.append(output)
+    except FileNotFoundError:
+        findings.append("[WARN] Không tìm thấy bandit, bỏ qua bước quét tĩnh mã nguồn Python.")
+    return findings
+
+
+def main():
+    staged_files = get_staged_files()
+    all_findings = []
+
+    for file_path in staged_files:
+        all_findings.extend(scan_sensitive(file_path))
+        perm_issue = check_permissions(file_path)
+        if perm_issue:
+            all_findings.append(perm_issue)
+
+    all_findings.extend(run_bandit())
+
+    if all_findings:
+        print("\033[91mCOMMIT BLOCKED by GitSecure!\033[0m")
+        for finding in all_findings:
+            print(f" - {finding}")
+            log(finding)
+        log("COMMIT BLOCKED by GitSecure!")
+        sys.exit(1)
+
+    print("GitSecure: All checks passed!")
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
