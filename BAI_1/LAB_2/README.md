@@ -47,6 +47,7 @@ git commit -m "test"
 ```
 
 Kết quả mong đợi: commit bị chặn với thông báo `COMMIT BLOCKED by GitSecure!` và chi tiết được ghi vào `gitsecure.log`.
+![Hình ảnh 1](image/image.png)
 
 Sau khi kiểm thử, xóa file/thư mục vi phạm và commit lại — hook sẽ in `GitSecure: All checks passed!` và cho phép commit tiếp tục.
 
