@@ -8,3 +8,10 @@ secure.log
 secure.log.*
 flask_run.log
 *.log.gz
+
+# BAI_2 - crypto-toolkit & mini-ca generated artifacts
+*.enc
+*.dec
+certs/
+*.pem
+BAI_2/LAB_1/securecrypto/upload/
