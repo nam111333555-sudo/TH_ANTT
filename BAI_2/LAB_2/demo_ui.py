@@ -77,7 +77,7 @@ class CADemoApp(tk.Tk):
                                   "Phải tạo CA trước khi phát hành chứng chỉ!")
             return
         subject_info = {
-            "common_name": "Phuoc_Nguyen",
+            "common_name": "An_Nguyen",
             "org": "PHUOCNTMH Company",
             "country": "VN"
         }
@@ -92,7 +92,7 @@ class CADemoApp(tk.Tk):
         messagebox.showinfo("Thông báo", "Phát hành chứng chỉ thành công!")
 
     def verify_chain(self):
-        cert_path = os.path.join("certs", "Phuoc_Nguyen_cert.pem")
+        cert_path = os.path.join("certs", "An_Nguyen_cert.pem")
         if not os.path.exists(cert_path):
             messagebox.showerror("Lỗi",
                                   "Chưa có chứng chỉ user để kiểm tra!")
@@ -110,7 +110,7 @@ class CADemoApp(tk.Tk):
         messagebox.showinfo("Kết quả", f"Chuỗi chứng chỉ hợp lệ: {valid}")
 
     def revoke_cert(self):
-        cert_file = os.path.join("certs", "Phuoc_Nguyen_cert.pem")
+        cert_file = os.path.join("certs", "An_Nguyen_cert.pem")
         issuer_cert = os.path.join("certs", "intermediate_cert.pem")
         issuer_key = os.path.join("certs", "intermediate_key.pem")
         if not all(os.path.exists(p)
@@ -125,7 +125,7 @@ class CADemoApp(tk.Tk):
         messagebox.showinfo("Thông báo", "Chứng chỉ đã được thu hồi!")
 
     def ocsp_check(self):
-        cert_file = os.path.join("certs", "Phuoc_Nguyen_cert.pem")
+        cert_file = os.path.join("certs", "An_Nguyen_cert.pem")
         if not os.path.exists(cert_file):
             messagebox.showerror("Lỗi",
                                   "Chưa có chứng chỉ user để kiểm tra OCSP!")

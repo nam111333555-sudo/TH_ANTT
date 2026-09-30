@@ -37,12 +37,12 @@ python demo_ui.py      # chạy giao diện GUI, bấm lần lượt các nút 1
 Tạo Root CA...
 Tạo Intermediate CA...
 Phát hành chứng chỉ người dùng cuối...
-Đã phát hành: certs\Phuoc_Nguyen_cert.pem, certs\Phuoc_Nguyen_key.pem
+Đã phát hành: certs\An_Nguyen_cert.pem, certs\An_Nguyen_key.pem
 Kiểm tra chuỗi chứng chỉ...
 Chuỗi hợp lệ: True
 Thu hồi chứng chỉ user1...
 Đã thu hồi
-Kiểm tra trạng thái OCSP của Phuoc_Nguyen_cert.pem...
+Kiểm tra trạng thái OCSP của An_Nguyen_cert.pem...
 Trạng thái: Revoked
 ```
 
@@ -57,7 +57,7 @@ Giao diện Tkinter với 5 nút thao tác tương ứng các bước trong quy 
 Tạo thành công cặp khóa/chứng chỉ Root CA và Intermediate CA (ký bởi Root CA).
 
 ![Bước 2: Phát hành User Cert](image/image-3.png)
-Intermediate CA phát hành chứng chỉ end-entity cho `Phuoc_Nguyen`, lưu ra `certs/Phuoc_Nguyen_cert.pem`.
+Intermediate CA phát hành chứng chỉ end-entity cho `An_Nguyen`, lưu ra `certs/An_Nguyen_cert.pem`.
 
 ![Bước 3: Kiểm tra chuỗi chứng chỉ](image/image-4.png)
 `verify_certificate_chain` xác thực chữ ký từ User Cert → Intermediate → Root: kết quả `Chuỗi hợp lệ: True`.

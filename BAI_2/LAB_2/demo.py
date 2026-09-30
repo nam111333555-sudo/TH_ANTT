@@ -35,7 +35,7 @@ def setup_ca():
 
 def issue_cert_demo():
     subject_info = {
-        "common_name": "Phuoc_Nguyen",
+        "common_name": "An_Nguyen",
         "org": "PHUOCNTMH Company",
         "country": "VN"
     }
@@ -62,7 +62,7 @@ def verify_chain_demo(user_cert_path):
 def revoke_demo():
     print("Thu hồi chứng chỉ user1...")
     revoke_certificate(
-        os.path.join("certs", "Phuoc_Nguyen_cert.pem"),
+        os.path.join("certs", "An_Nguyen_cert.pem"),
         os.path.join("certs", "intermediate_cert.pem"),
         os.path.join("certs", "intermediate_key.pem"),
         reason=x509.ReasonFlags.key_compromise
@@ -70,8 +70,8 @@ def revoke_demo():
     print("Đã thu hồi")
 
 def ocsp_check_demo():
-    print("Kiểm tra trạng thái OCSP của Phuoc_Nguyen_cert.pem...")
-    status = check_revocation_status(os.path.join("certs", "Phuoc_Nguyen_cert.pem"))
+    print("Kiểm tra trạng thái OCSP của An_Nguyen_cert.pem...")
+    status = check_revocation_status(os.path.join("certs", "An_Nguyen_cert.pem"))
     print(f"Trạng thái: {'Revoked' if status else 'Valid'}")
 
 def run_all():
