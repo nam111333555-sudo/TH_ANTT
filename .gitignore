@@ -15,3 +15,10 @@ flask_run.log
 certs/
 *.pem
 BAI_2/LAB_1/securecrypto/upload/
+
+# BAI_3 - SecureChat & NetRecon generated/secret files
+.env
+netrecon.log
+*.srl
+*.srl.bak
+*.csr

@@ -1,0 +1,4 @@
+flask
+click
+htmx
+python-dotenv
