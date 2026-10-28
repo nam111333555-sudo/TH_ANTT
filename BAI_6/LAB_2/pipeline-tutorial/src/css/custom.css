@@ -1,0 +1,31 @@
+:root {
+  --ifm-color-primary: #16704b;
+  --ifm-color-primary-dark: #146544;
+  --ifm-color-primary-darker: #135f40;
+  --ifm-color-primary-darkest: #0f4e35;
+  --ifm-color-primary-light: #187b53;
+  --ifm-color-primary-lighter: #198157;
+  --ifm-color-primary-lightest: #1d9263;
+  --ifm-font-family-base: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ifm-heading-font-weight: 750;
+}
+[data-theme='dark'] { --ifm-color-primary: #6bd6a6; }
+.lab-hero { padding: 88px 0 48px; background: #101f1c; color: #f2f5ec; }
+.lab-eyebrow { font-size: .76rem; letter-spacing: .13em; font-weight: 700; }
+.lab-hero .lab-eyebrow { color: #9ed8b6; }
+.lab-hero h1 { font-size: clamp(2.4rem, 6vw, 4.8rem); line-height: 1.12; letter-spacing: -.045em; max-width: 950px; margin: 28px 0; }
+.lab-lead { max-width: 660px; font-size: 1.18rem; color: #c1d2c8; }
+.lab-actions { display: flex; flex-wrap: wrap; gap: 14px; margin: 30px 0 56px; }
+.lab-hero .button--primary { background: #b6ed8b; color: #10261c; border-color: #b6ed8b; }
+.lab-hero .button--secondary { background: transparent; color: #f2f5ec; border-color: #617b6f; }
+.lab-flow { border-top: 1px solid #3d5149; padding-top: 25px; font-family: monospace; font-size: .95rem; letter-spacing: .08em; display: flex; gap: 24px; flex-wrap: wrap; }
+.lab-flow span { color: #a9d98d; }
+.lab-section { padding-top: 64px; padding-bottom: 64px; }
+.lab-section h2 { margin-bottom: 30px; font-size: 2rem; }
+.lab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.lab-card { border: 1px solid var(--ifm-color-emphasis-300); border-radius: 12px; padding: 28px; }
+.lab-number { font-family: monospace; color: var(--ifm-color-primary); }
+.lab-card h3 { margin-top: 24px; font-size: 1.5rem; }
+.lab-card p { margin-bottom: 0; color: var(--ifm-color-emphasis-700); }
+.lab-note { margin-top: 28px; color: var(--ifm-color-emphasis-700); font-size: .9rem; }
+@media (max-width: 700px) { .lab-grid { grid-template-columns: 1fr; } .lab-hero { padding-top: 48px; } .lab-flow { gap: 12px; } }

@@ -1,0 +1,29 @@
+# Mo rong 6.1: bat cac security gate, khong bo qua loi.
+include:
+  - local: '/.gitlab-ci.yml'
+
+stages: [build, test, deploy]
+
+test-job:
+  stage: test
+  dependencies:
+    - build-job
+  script:
+    - npm test
+    - test -s build/index.html
+    - test -s build/docs/intro/index.html
+
+dependency-scan:
+  stage: test
+  dependencies: []
+  script:
+    - npm audit --omit=dev --audit-level=high
+
+config-and-secret-scan:
+  stage: test
+  image:
+    name: aquasec/trivy:0.69.3
+    entrypoint: ['']
+  dependencies: []
+  script:
+    - trivy fs --scanners vuln,misconfig,secret --severity HIGH,CRITICAL --exit-code 1 --skip-dirs node_modules --skip-dirs .tools --skip-dirs .git .

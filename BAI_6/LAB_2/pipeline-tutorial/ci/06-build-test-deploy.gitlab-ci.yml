@@ -1,0 +1,49 @@
+# Bai 6.2.2: build artifact -> test -> GitLab Pages.
+image: node:24-bookworm-slim
+
+stages:
+  - build
+  - test
+  - deploy
+
+default:
+  interruptible: true
+
+build-job:
+  stage: build
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
+
+test-job:
+  stage: test
+  dependencies:
+    - build-job
+  script:
+    - npm test
+    - test -s build/index.html
+    - test -s build/docs/intro/index.html
+
+pages:
+  stage: deploy
+  dependencies:
+    - build-job
+  script:
+    - mv build public
+  pages:
+    publish: public
+  artifacts:
+    paths:
+      - public/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

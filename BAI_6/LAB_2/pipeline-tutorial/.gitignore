@@ -1,0 +1,12 @@
+node_modules/
+build/
+public/
+.docusaurus/
+.cache/
+.tools/
+.npm/
+.env
+.env.*
+!.env.example
+*.log
+lab-06*.pdf

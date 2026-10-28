@@ -1,0 +1,24 @@
+# Phien ban 2 stage dung theo bai 6.2.2.
+image: node:24-bookworm-slim
+stages: [build, deploy]
+build-job:
+  stage: build
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+pages:
+  stage: deploy
+  dependencies:
+    - build-job
+  script:
+    - mv build public
+  pages:
+    publish: public
+  artifacts:
+    paths:
+      - public/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
